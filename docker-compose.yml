@@ -28,6 +28,7 @@ services:
       retries: 10
       start_period: 10s
     volumes:
-      - postgres_/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
-volumes: postgres_
+volumes:
+  postgres_data:
