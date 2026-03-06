@@ -9,6 +9,12 @@ services:
       - "8080:8080"
     command: make dev
     user: "${UID}:${GID}"
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_PORT=5432
     depends_on:
       db:
         condition: service_healthy
@@ -18,15 +24,15 @@ services:
     volumes:
       - ./services/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
     ports:
-      - "80:80"
-      - "443:443"
+      - "8081:80"
+      - "8443:443"
     depends_on:
       - app
 
   db:
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     ports:
-      - "5433:5432"
+      - "5432:5432"
