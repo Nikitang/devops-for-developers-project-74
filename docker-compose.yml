@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    image: nikitang1/devops-for-developers-project-74:latest
+    command: make test
