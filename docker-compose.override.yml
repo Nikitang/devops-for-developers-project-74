@@ -3,30 +3,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - ./app:/app
     ports:
       - "8080:8080"
-    command: make dev
-    user: "${UID}:${GID}"
+    volumes:
+      - ./app:/app
+    environment:
+      NODE_ENV: development
+    command: ["make", "dev"]
     depends_on:
       db:
         condition: service_healthy
-
   caddy:
-    image: caddy:2.8-alpine
+    image: caddy:latest
     volumes:
-      - ./services/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./services/caddy/Caddyfile:/etc/caddy/Caddyfile
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - app
-
-  db:
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: postgres
-    ports:
-      - "5433:5432"
