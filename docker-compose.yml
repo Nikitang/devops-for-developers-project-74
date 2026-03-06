@@ -1,27 +1,27 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    image: nikitang1/devops-for-developers-project-74:latest
+    command: make test
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
-    image: postgres:15
+    image: postgres:16-alpine
     environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile.production
-    command: ["make", "test"]
-    image: despot84/js-fastify-blog
-    environment:
-      DATABASE_USERNAME: ${DATABASE_USERNAME}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_PORT: ${DATABASE_PORT}
-      DATABASE_HOST: "db"
-    depends_on:
-      db:
-        condition: service_healthy
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
