@@ -8,7 +8,6 @@ services:
     ports:
       - "8080:8080"
     command: make dev
-    user: "${UID}:${GID}"
     environment:
       - DATABASE_HOST=db
       - DATABASE_NAME=postgres
